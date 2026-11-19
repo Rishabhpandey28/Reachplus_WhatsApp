@@ -1,0 +1,86 @@
+[[extensions]]
+name = "Send WhatsApp message"
+type = "flow_action"
+handle = "send-whatsapp-message"
+description = "Send an approved WhatsApp template to a customer through ReachPulse."
+# Your backend must be reachable on a public HTTPS address (see setup guide).
+runtime_url = "https://YOUR-PUBLIC-URL/api/integrations/shopify-flow/action"
+
+[settings]
+
+  [[settings.fields]]
+  type = "single_line_text_field"
+  key = "phone"
+  name = "Customer phone"
+  description = "Phone number with or without country code. Example: {{order.shippingAddress.phone}}"
+  required = true
+
+  [[settings.fields]]
+  type = "single_line_text_field"
+  key = "customer_name"
+  name = "Customer name"
+  description = "Optional. Shown in the inbox. Example: {{order.customer.firstName}}"
+  required = false
+
+  [[settings.fields]]
+  type = "single_line_text_field"
+  key = "template_name"
+  name = "Template name"
+  description = "Exact name of the APPROVED WhatsApp template. Example: order_confirmation"
+  required = true
+
+  [[settings.fields]]
+  type = "single_line_text_field"
+  key = "language"
+  name = "Template language"
+  description = "Meta language code. Leave empty for en_US. Example: hi"
+  required = false
+
+  [[settings.fields]]
+  type = "single_line_text_field"
+  key = "variable_1"
+  name = "Variable 1"
+  description = "Value for {{1}} in the template"
+  required = false
+
+  [[settings.fields]]
+  type = "single_line_text_field"
+  key = "variable_2"
+  name = "Variable 2"
+  description = "Value for {{2}} in the template"
+  required = false
+
+  [[settings.fields]]
+  type = "single_line_text_field"
+  key = "variable_3"
+  name = "Variable 3"
+  description = "Value for {{3}} in the template"
+  required = false
+
+  [[settings.fields]]
+  type = "single_line_text_field"
+  key = "variable_4"
+  name = "Variable 4"
+  description = "Value for {{4}} in the template"
+  required = false
+
+  [[settings.fields]]
+  type = "single_line_text_field"
+  key = "variable_5"
+  name = "Variable 5"
+  description = "Value for {{5}} in the template"
+  required = false
+
+  [[settings.fields]]
+  type = "single_line_text_field"
+  key = "header_media_url"
+  name = "Header media link"
+  description = "Only for templates with an image/video/document header. Public https link."
+  required = false
+
+  [[settings.fields]]
+  type = "single_line_text_field"
+  key = "reference"
+  name = "Reference"
+  description = "Optional. Use the order id so the same order never gets the same message twice. Example: {{order.id}}"
+  required = false
