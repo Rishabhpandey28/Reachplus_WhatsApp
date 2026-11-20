@@ -1,3 +1,4 @@
+
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
@@ -6,10 +7,10 @@ import Sidebar from "./Components/Sidebar";
 
 import Dashboard from "./pages/Dashboard";
 import TemplateLibraryPage from "./pages/TemplateLibraryPage";
-import DefineAudience from './pages/DefineAudience';
-import YourTemplate from './pages/YourTemplate';
-import Inbox from './pages/Inbox';
-import Automation from './pages/Automation';
+import DefineAudience from "./pages/DefineAudience";
+import YourTemplate from "./pages/YourTemplate";
+import Inbox from "./pages/Inbox";
+import Automation from "./pages/Automation";
 
 const App = () => {
   return (
@@ -25,33 +26,43 @@ const App = () => {
         {/* PAGE CONTENT */}
         <main className="ml-[220px] min-w-0 pt-[72px]">
           <Routes>
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
-            {/* WhatsApp Inbox Route */}
+
+            {/* Homepage */}
+            <Route
+              path="/"
+              element={<Navigate to="/dashboard" replace />}
+            />
+
+            {/* Handle Render index.html route */}
+            <Route
+              path="/index.html"
+              element={<Navigate to="/dashboard" replace />}
+            />
+
+            {/* Dashboard */}
+            <Route path="/dashboard" element={<Dashboard />} />
+
+            {/* Inbox */}
             <Route path="/inbox" element={<Inbox />} />
 
-            {/* Dashboard Route */}
-            <Route
-              path="/dashboard"
-              element={<Dashboard />}
-            />
+            {/* Template Library */}
+            <Route path="/templates" element={<TemplateLibraryPage />} />
 
-            {/* Template Library Route */}
-            <Route
-              path="/templates"
-              element={<TemplateLibraryPage />}
-            />
+            {/* Contacts */}
+            <Route path="/contacts" element={<DefineAudience />} />
 
-            <Route
-              path="/contacts"
-              element={<DefineAudience/>}
-            />
-            <Route
-              path="/yourtemplates"
-              element={<YourTemplate/>}
-            />
+            {/* Your Templates */}
+            <Route path="/yourtemplates" element={<YourTemplate />} />
 
-            {/* AI auto-reply */}
+            {/* Automation */}
             <Route path="/automation" element={<Automation />} />
+
+            {/* Unknown routes */}
+            <Route
+              path="*"
+              element={<Navigate to="/dashboard" replace />}
+            />
+
           </Routes>
         </main>
 
