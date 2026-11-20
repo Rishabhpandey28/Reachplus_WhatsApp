@@ -16,41 +16,27 @@ const createAutomationRouter = require('./routes/automation');
 const { maybeAutoReply } = require('./services/autoReply');
 
 const app = express();
-
-const cors = require("cors");
-
-const allowedOrigins = [
-  "https://reachplus-whatsapp-1.onrender.com",
-  "http://localhost:5173"
-];
-
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("CORS blocked origin: " + origin));
-    }
-  },
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-}));
-
 const server = http.createServer(app);
 
 const PORT = process.env.PORT || 5000;
-const FRONTEND_ORIGIN =
-  process.env.FRONTEND_ORIGIN || 'http://localhost:5173';
 
-const ALLOWED_ORIGINS = FRONTEND_ORIGIN
-  .split(',')
-  .map((origin) => origin.trim());
+// Render frontend URL. FRONTEND_ORIGIN can contain comma-separated origins.
+const FRONTEND_ORIGIN =
+  process.env.FRONTEND_ORIGIN ||
+  'https://reachplus-whatsapp-1.onrender.com';
+
+const ALLOWED_ORIGINS = [
+  ...new Set([
+    ...FRONTEND_ORIGIN.split(',').map((origin) => origin.trim()).filter(Boolean),
+    'https://reachplus-whatsapp-1.onrender.com',
+    'http://localhost:5173',
+  ]),
+];
 
 const WHATSAPP_API_VERSION =
   process.env.WHATSAPP_API_VERSION || 'v25.0';
 
-// In development, accept the frontend on any localhost / 127.0.0.1 port
-// (Vite moves to 5174, 5175... when 5173 is busy). Production only uses FRONTEND_ORIGIN.
+// Allow only the configured frontend origins (plus local Vite development).
 function corsOrigin(origin, callback) {
   if (!origin || ALLOWED_ORIGINS.includes(origin)) {
     return callback(null, true);
@@ -62,6 +48,14 @@ function corsOrigin(origin, callback) {
 
   return callback(null, isLocalDev);
 }
+
+// Apply CORS once, before all API routes. This also handles preflight requests.
+app.use(cors({
+  origin: corsOrigin,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+
 
 // --------------------------------------------------
 // SOCKET.IO
@@ -77,12 +71,6 @@ const io = new Server(server, {
 // --------------------------------------------------
 // MIDDLEWARE
 // --------------------------------------------------
-
-app.use(
-  cors({
-    origin: corsOrigin,
-  })
-);
 
 // Preserve raw webhook body for Meta signature verification.
 app.use(
