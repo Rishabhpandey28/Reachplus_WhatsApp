@@ -1,0 +1,16 @@
+
+client_id = "de7e9efb02685c971f15078b5eb72f68"
+application_url = "https://reachplus-whatsapp-1.onrender.com/dashboard"
+embedded = true
+name = "ReachPulse-2"
+
+[access_scopes]
+scopes = "read_orders,read_customers,read_products"
+optional_scopes = []
+use_legacy_install_flow = false
+
+[auth]
+redirect_urls = []
+
+[webhooks]
+api_version = "2026-10"
